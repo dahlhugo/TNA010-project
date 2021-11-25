@@ -1,4 +1,6 @@
 #takes file path and process the data within text file.
+using Snowball
+
 function preprocess(file_path) 
 
     #open files data.txt and stoplist.txt
@@ -11,8 +13,7 @@ function preprocess(file_path)
 
     #empty dictionary
     dictionary = Set()
-    stop_words = String.(split(stop_words_string, '\n'));
-    
+    stop_words = String.(split(stop_words_string, "\r\n"));
 
     #character vector with punctuations
     punctuations = ['.', '!', '?']
@@ -25,28 +26,32 @@ function preprocess(file_path)
     
 
     #removes leading and trailing white spaces
-    
+    stmr = Stemmer("english");
     for i in 1:size(string_vec)[1]
         string_vec[i] = replace(string_vec[i], r"[0-9]" => s"");
-        string_vec[i]= replace(string_vec[i], ['\n', '"', '/', '+', '-', 
-        '(', ')', '=', '[',']', '@', '|', '^'] => "");
-        string_vec[i] = replace(string_vec[i], [',', ':'] => " ");
+        string_vec[i]= replace(string_vec[i], ['"', '/', '\\', '+', '-', '~', 
+        '(', ')', '=', '[',']', '@', '|', '^', '*', '{', '}', '%', '<', '>'] => "");
+        string_vec[i] = replace(string_vec[i], ['\r', '\n', ',', ':'] => " ");
         string_vec[i] = String.(strip(string_vec[i], (' ')));
+        string_vec[i] = stem_all(stmr, string_vec[i]);
+        string_vec[i] = lowercase(string_vec[i])
         
         #TODO: Remove stop_words
         temp = String.(split(string_vec[i], " "))
         for j in temp
-            for k in stop_words
-                if !(j == k)
-                    string_vec[i] = replace(string_vec[i], k => "")
-                    push!(dictionary, j)                              
-                end
+            if !(in(stop_words).(j))
+                push!(dictionary, j)
+                #print("added" * j * '\n')
+            else
+                string_vec[i] = replace(string_vec[i], j => "")
+                #print(j * '\n')                     
             end
         end
     end
 
     sentences[: , 1] = string_vec;
     sentences = sentences[(sentences[:, 1].!=""), :];
+    dictionary = filter(e->length(e) <= 1, dictionary)
 
     #dictionary = dictionary[dictionary[:].!=""]
 
@@ -58,4 +63,4 @@ end
 
 sentences = preprocess("data.txt")
 
-print(length(sentences))
+print(sentences)
