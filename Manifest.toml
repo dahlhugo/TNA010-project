@@ -143,9 +143,7 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
 [[Snowball]]
 deps = ["Languages", "Snowball_jll", "WordTokenizers"]
-git-tree-sha1 = "d7bafa25e15a9893d2ae3a4d454c209275b2d3a1"
-repo-rev = "master"
-repo-url = "https://github.com/JuliaText/Snowball.jl.git"
+git-tree-sha1 = "d38c1ff8a2fca7b1c65a51457dabebef28052399"
 uuid = "fb8f903a-0164-4e73-9ffe-431110250c3b"
 version = "0.1.0"
 

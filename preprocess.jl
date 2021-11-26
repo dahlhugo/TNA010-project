@@ -4,6 +4,8 @@ Pkg.instantiate()
 #takes file path and process the data within text file.
 using Snowball
 import Base.findall
+import SparseArrays
+import LinearAlgebra
 
 function preprocess(file_path) 
 
@@ -34,7 +36,7 @@ function preprocess(file_path)
     for i in 1:size(string_vec)[1]
         string_vec[i] = replace(string_vec[i], r"[0-9]" => s"");
         string_vec[i]= replace(string_vec[i], ['"', '/', '\\', '+', '-', '~', 
-        '(', ')', '=', '[',']', '@', '|', '^', '*', '{', '}', '%', '<', '>'] => "");
+        '(', ')', '=', '[',']', '@', '|', '^', '*', '{', '}', '%', '<', '>'] => " ");
         string_vec[i] = replace(string_vec[i], ['\r', '\n', ',', ':'] => " ");
         string_vec[i] = String.(strip(string_vec[i], (' ')));
         string_vec[i] = stem_all(stmr, string_vec[i]);
@@ -71,7 +73,7 @@ function findall(pattern,string::AbstractString)
     s = 1
     while true
         range = findnext(pattern,string,s)
-        if range == nothing
+        if range === nothing
              break
         else
             push!(toReturn, range)
@@ -87,26 +89,34 @@ length(dictionary)
 #print(dictionary)
 size(sentences)
 
-print(dictionary)
-print(sentences[2, 1])
+#print(dictionary)
+#print(sentences[2, 1])
 
-dictionary[301]
+# findall(dictionary[301], sentences[2, 1])
 
-findall(dictionary[301], sentences[2, 1])
+mat = zeros(Int64, length(dictionary), size(sentences)[1])
+#mat = SparseArrays.sparse(mat)
 
-mat = zeros(Int64, size(sentences)[1], length(dictionary))
+# st = "Today is a fresh day: not too warm, not to cold, just fresh!"
 
-st = "Today is a fresh day: not too warm, not to cold, just fresh!"
-
-a = findall("fresh", st)
-print(length(a))
-for x = size(mat)[1]
-    for y = size(mat)[2]
-        mat[x, y] = length(findall(dictionary[y],sentences[x, 1]))
+# a = findall("fresh", st)
+# print(length(a))
+for x in 1:size(mat)[1]
+    for y in 1:size(mat)[2]
+        mat[x, y] = length(collect(eachmatch(Regex(dictionary[x]), sentences[y, 1])))
+        # if mat[x, y] != 0 print("yey") end
     end
 end
 
+F = LinearAlgebra.svd(mat);
 
-print(mat)
+to_list = 3;
 
-
+print(string("Top ", to_list, " key sentences:", '\n'))
+for i in partialsortperm(Vector(F.V[:, 1]), 1:to_list)
+    print(sentences[i, 2] * '\n')
+end
+print(string("Top ", to_list, " key words:", '\n'))
+for i in partialsortperm(Vector(F.U[:, 1]), 1:to_list)
+    print(dictionary[i] * '\n')
+end
