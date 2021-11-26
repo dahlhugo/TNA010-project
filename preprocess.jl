@@ -1,7 +1,9 @@
-using Snowball
+using Pkg
+Pkg.instantiate()
 
 #takes file path and process the data within text file.
 using Snowball
+import Base.findall
 
 function preprocess(file_path) 
 
@@ -53,16 +55,58 @@ function preprocess(file_path)
 
     sentences[: , 1] = string_vec;
     sentences = sentences[(sentences[:, 1].!=""), :];
-    dictionary = filter(e->length(e) <= 1, dictionary)
+    dictionary = filter(e->length(e) > 1, dictionary)
+    dictionary = sort!(collect(dictionary))
 
     #dictionary = dictionary[dictionary[:].!=""]
 
     #TODO: Implement stemming
 
 
-    return dictionary;
+    return (dictionary, sentences);
 end
 
-sentences = preprocess("data.txt")
+function findall(pattern,string::AbstractString)
+    toReturn = UnitRange{Int64}[]
+    s = 1
+    while true
+        range = findnext(pattern,string,s)
+        if range == nothing
+             break
+        else
+            push!(toReturn, range)
+            s = first(range)+1
+        end
+    end
+    return toReturn
+end
 
-print(sentences)
+dictionary, sentences = preprocess("data.txt")
+
+length(dictionary)
+#print(dictionary)
+size(sentences)
+
+print(dictionary)
+print(sentences[2, 1])
+
+dictionary[301]
+
+findall(dictionary[301], sentences[2, 1])
+
+mat = zeros(Int64, size(sentences)[1], length(dictionary))
+
+st = "Today is a fresh day: not too warm, not to cold, just fresh!"
+
+a = findall("fresh", st)
+print(length(a))
+for x = size(mat)[1]
+    for y = size(mat)[2]
+        mat[x, y] = length(findall(dictionary[y],sentences[x, 1]))
+    end
+end
+
+
+print(mat)
+
+
