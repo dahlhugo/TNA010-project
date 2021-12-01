@@ -78,7 +78,7 @@ Qij = ae 1/Nj if there is a link from j to i0 otherwise. This definition means t
 
 i. Similarly, column j has nonzero elements equal to Nj in those positions that correspond to the outlinks of
 
-j, and, provided that the page hasoutlinks, the sum of all the elements in column j is equal to one. In the following symbolic picture of the matrix Q, non-zero elements are denoted *:
+j, and, provided that the page has outlinks, the sum of all the elements in column j is equal to one. In the following symbolic picture of the matrix Q, non-zero elements are denoted *:
 
 j
 
