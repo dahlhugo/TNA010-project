@@ -36,7 +36,7 @@ Oi -
 
 z
 
-In general, a page i can be considered as more important the more inlinks it has.However, a ranking system based only on the number of inlinks is easy to manipulate23: When you design a web page i that (e.g. for commercial reasons) you would like to be seen by as many as possible, you could simply create a large number of (information-less and unimportant) pages that have outlinks to i. In order todiscourage this, one defines the rank of
+In general, a page i can be considered as more important the more inlinks it has.However, a ranking system based only on the number of inlinks is easy to manipulate23: When you design a web page i that (e.g. for commercial reasons) you would like to be seen by as many as possible, you could simply create a large number of (information-less and unimportant) pages that have outlinks to i. In order to discourage this, one defines the rank of
 
 i in such a way that if a highly ranked page j, has an outlink to i, this adds to the importance of i in the following way: the rank of page
 

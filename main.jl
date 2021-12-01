@@ -40,20 +40,20 @@ F = LinearAlgebra.svd(mat);
 
 to_list = 3;
 
-# print(string("Top ", to_list, " key sentences:", '\n'))
-# for i in partialsortperm(Vector(F.V[:, 1]), 1:to_list)
-#     print(sentences[i, 2] * '\n')
-# end
-# print(string("Top ", to_list, " key words:", '\n'))
-# for i in partialsortperm(Vector(F.U[:, 1]), 1:to_list)
-#     print(dictionary[i] * '\n')
-# end
+print(string("Top ", to_list, " key sentences:", '\n'))
+for i in partialsortperm(Vector(F.V[:, 1]), 1:to_list)
+    print(sentences[i, 2] * '\n')
+end
+print(string("Top ", to_list, " key words:", '\n'))
+for i in partialsortperm(Vector(F.U[:, 1]), 1:to_list)
+    print(dictionary[i] * '\n')
+end
 
 #------------------
 #Rank-k approximation
 #----------
-k = 10
-D = F.Vt[1:k, :]
+k = 5
+D = F.V[1:k, :]
 B = LinearAlgebra.qr(D, Val(true))
 
 C = transpose([1:1:size(B.P)[1];])*B.P 

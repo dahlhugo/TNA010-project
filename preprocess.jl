@@ -19,8 +19,9 @@ function preprocess(file_path)
 
     #empty dictionary
     dictionary = Set()
-    stop_words = String.(split(stop_words_string, "\r\n"));
-
+    stop_words_string = replace(stop_words_string, '\r' => "")
+    stop_words = String.(split(stop_words_string, "\n"));
+    #print(stop_words)
     #character vector with punctuations
     punctuations = ['.', '!', '?']
 
@@ -47,7 +48,7 @@ function preprocess(file_path)
         for j in temp
             if !(in(stop_words).(j))
                 push!(dictionary, j)
-                #print("added" * j * '\n')
+                #print("added " * j * '\n')
             else
                 string_vec[i] = replace(string_vec[i], j => "")
                 #print(j * '\n')                     
@@ -60,7 +61,7 @@ function preprocess(file_path)
     dictionary = filter(e->length(e) > 1, dictionary)
     dictionary = sort!(collect(dictionary))
 
-    #dictionary = dictionary[dictionary[:].!=""]
+    dictionary = dictionary[dictionary[:].!=""]
 
     #TODO: Implement stemming
 
