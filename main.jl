@@ -22,11 +22,11 @@ dictionary, sentences = preprocess("data.txt")
 
 #creation of term-frequency matrix
 mat = zeros(Int64, length(dictionary), size(sentences)[1])
+# mat = SparseArrays.sparse(mat)
 
 for x in 1:size(mat)[1]
     for y in 1:size(mat)[2]
         mat[x, y] = length(collect(eachmatch(Regex(dictionary[x]), sentences[y, 1])))
-        
     end
 end
 
@@ -38,16 +38,16 @@ end
 
 F = LinearAlgebra.svd(mat);
 
-to_list = 3;
+to_list = 20;
 
-print(string("Top ", to_list, " key sentences:", '\n'))
-for i in partialsortperm(Vector(F.V[:, 1]), 1:to_list)
-    print(sentences[i, 2] * '\n')
-end
-print(string("Top ", to_list, " key words:", '\n'))
-for i in partialsortperm(Vector(F.U[:, 1]), 1:to_list)
-    print(dictionary[i] * '\n')
-end
+# print(string("Top ", to_list, " key sentences:", '\n'))
+# for i in partialsortperm(Vector(F.V[:, 1]), 1:to_list)
+#     print(sentences[i, 2] * '\n')
+# end
+# print(string("Top ", to_list, " key words:", '\n'))
+# for i in partialsortperm(Vector(F.U[:, 1]), 1:to_list)
+#     print(dictionary[i] * '\n')
+# end
 
 #------------------
 #Rank-k approximation
